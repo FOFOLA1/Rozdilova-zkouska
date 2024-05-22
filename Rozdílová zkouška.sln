@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autobazar", "Autobazar\Autobazar.csproj", "{1886AFDC-2D2B-435A-8E37-F9ABD73110DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autobazar", "Autobazar\Autobazar.csproj", "{1886AFDC-2D2B-435A-8E37-F9ABD73110DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jizdenka", "Jizdenka\Jizdenka.csproj", "{5F04951D-5DC3-4CAC-BDCD-A21EEC532836}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1886AFDC-2D2B-435A-8E37-F9ABD73110DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1886AFDC-2D2B-435A-8E37-F9ABD73110DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1886AFDC-2D2B-435A-8E37-F9ABD73110DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F04951D-5DC3-4CAC-BDCD-A21EEC532836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F04951D-5DC3-4CAC-BDCD-A21EEC532836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F04951D-5DC3-4CAC-BDCD-A21EEC532836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F04951D-5DC3-4CAC-BDCD-A21EEC532836}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
