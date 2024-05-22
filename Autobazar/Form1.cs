@@ -1,10 +1,13 @@
+ï»¿using System.Windows.Forms;
+
 namespace Autobazar
 {
 
     public partial class Form1 : Form
     {
         Autoservis autoservis = new Autoservis();
-        List<string> car_show = new List<string>();
+        int temp_index;
+
         public Form1()
         {
             InitializeComponent();
@@ -31,7 +34,7 @@ namespace Autobazar
 
             if (text1.Text == null)
             {
-                incorrect.Add("Výrobce");
+                incorrect.Add("VÃ½robce");
             }
             if (text2.Text == null)
             {
@@ -39,13 +42,13 @@ namespace Autobazar
             }
             if (!Int32.TryParse(text3.Text, out rok))
             {
-                incorrect.Add("Rok výroby");
+                incorrect.Add("Rok vÃ½roby");
             }
             if (!Int32.TryParse(text4.Text, out km))
             {
-                incorrect.Add("Najeté kilometry");
+                incorrect.Add("NajetÃ© kilometry");
             }
-            if (comboBox.SelectedItem != "Nové" || comboBox.SelectedItem != "Servis" || comboBox.SelectedItem != "Opravené" || comboBox.SelectedItem != "Vydané" || comboBox.SelectedItem == null)
+            if (comboBox.SelectedIndex == -1)
             {
                 incorrect.Add("Stav");
             }
@@ -53,7 +56,7 @@ namespace Autobazar
             if (incorrect.Count > 0)
             {
 
-                labelError.Text = "Nesprávnì zadané informace: ";
+                labelError.Text = "NesprÃ¡vnÄ› zadanÃ© informace: ";
                 for (int i = 0; i < incorrect.Count; i++)
                 {
                     if (incorrect.Count - i == 1)
@@ -77,18 +80,180 @@ namespace Autobazar
                     Typ = typ,
                     RokVyroby = rok,
                     NajeteKilometry = km,
-                    Stav = (string)comboBox.SelectedItem
+                    Stav = comboBox.SelectedIndex switch
+                    {
+                        0 => "NovÃ©",
+                        1 => "Servis",
+                        2 => "OpravenÃ©",
+                        3 => "VydanÃ©"
+                    }
                 });
-                car_show.Append(vyrobce + " " + typ);
 
                 listBox1.DataSource = null;
-                listBox1.DataSource = car_show;
+                listBox1.DataSource = autoservis.PrintSeznamAut();
+
+                text1.Text = "";
+                text2.Text = "";
+                text3.Text = "";
+                text4.Text = "";
+                labelError.Text = "";
+                comboBox.SelectedIndex = -1;
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void delete_Click(object sender, EventArgs e)
+        {
+            autoservis.DeleteCar(listBox1.SelectedIndex);
+            listBox1.DataSource = null;
+            listBox1.DataSource = autoservis.PrintSeznamAut();
+            if (autoservis.GetSeznamAut().Count == 0)
+            {
+                edit.Enabled = false;
+                delete.Enabled = false;
+            }
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            delete.Enabled = true;
+            edit.Enabled = true;
+
+        }
+
+        private void edit_Click(object sender, EventArgs e)
+        {
+            temp_index = listBox1.SelectedIndex;
+            save.Enabled = true;
+            discard.Enabled = true;
+            add.Enabled = false;
+            delete.Enabled = false;
+            edit.Enabled = false;
+            Auto c = autoservis.GetSeznamAut()[temp_index];
+            text1.Text = c.Vyrobce;
+            text2.Text = c.Typ;
+            text3.Text = c.RokVyroby.ToString();
+            text4.Text = c.NajeteKilometry.ToString();
+            comboBox.SelectedIndex = c.Stav switch
+            {
+                "NovÃ©" => 0,
+                "Servis" => 1,
+                "OpravenÃ©" => 2,
+                "VydanÃ©" => 3
+            };
+
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+            List<string> incorrect = new List<string>();
+            labelError.Text = "";
+            string vyrobce = text1.Text;
+            string typ = text2.Text;
+            int rok;
+            int km;
+
+            if (text1.Text == null)
+            {
+                incorrect.Add("VÃ½robce");
+            }
+            if (text2.Text == null)
+            {
+                incorrect.Add("Typ auta");
+            }
+            if (!Int32.TryParse(text3.Text, out rok))
+            {
+                incorrect.Add("Rok vÃ½roby");
+            }
+            if (!Int32.TryParse(text4.Text, out km))
+            {
+                incorrect.Add("NajetÃ© kilometry");
+            }
+            if (comboBox.SelectedIndex == -1)
+            {
+                incorrect.Add("Stav");
+            }
+
+            if (incorrect.Count > 0)
+            {
+
+                labelError.Text = "NesprÃ¡vnÄ› zadanÃ© informace: ";
+                for (int i = 0; i < incorrect.Count; i++)
+                {
+                    if (incorrect.Count - i == 1)
+                    {
+                        labelError.Text += incorrect[i];
+                    }
+                    else
+                    {
+                        labelError.Text += incorrect[i] + ", ";
+                    }
+
+                }
+
+            }
+            else
+            {
+                labelError.Text = "";
+                autoservis.EditCar(temp_index, new Auto
+                {
+                    Vyrobce = vyrobce,
+                    Typ = typ,
+                    RokVyroby = rok,
+                    NajeteKilometry = km,
+                    Stav = comboBox.SelectedIndex switch
+                    {
+                        0 => "NovÃ©",
+                        1 => "Servis",
+                        2 => "OpravenÃ©",
+                        3 => "VydanÃ©"
+                    }
+                });
+
+                listBox1.DataSource = null;
+                listBox1.DataSource = autoservis.PrintSeznamAut();
+
+                temp_index = -1;
+                save.Enabled = false;
+                discard.Enabled = false;
+                add.Enabled = true;
+                delete.Enabled = true;
+                edit.Enabled = true;
+
+                text1.Text = "";
+                text2.Text = "";
+                text3.Text = "";
+                text4.Text = "";
+                comboBox.SelectedIndex = -1;
+
+            }
+        }
+
+        private void discard_Click(object sender, EventArgs e)
+        {
+            temp_index = -1;
+            save.Enabled = false;
+            discard.Enabled = false;
+            add.Enabled = true;
+            delete.Enabled = true;
+            edit.Enabled = true;
+
+            text1.Text = "";
+            text2.Text = "";
+            text3.Text = "";
+            text4.Text = "";
+            labelError.Text = "";
+            comboBox.SelectedIndex = -1;
+        }
+
+        private void listBox1_DoubleClick(object sender, EventArgs e)
+        {
+            Auto c = autoservis.GetSeznamAut()[listBox1.SelectedIndex];
+            labelError.Text = $"{c.Vyrobce} {c.Typ}:\n  Rok vÃ½roby: {c.RokVyroby}\n  NajetÃ© kilometry: {c.NajeteKilometry}\n  Stav: {c.Stav}";
         }
     }
 
@@ -102,12 +267,12 @@ namespace Autobazar
     }
 
 
-    // Tøída reprezentující autoservis
+    // TÃ¸Ã­da reprezentujÃ­cÃ­ autoservis
     public partial class Autoservis
     {
         private List<Auto> seznamAut = new List<Auto>();
 
-        // Metoda pro pøidání nového automobilu
+        // Metoda pro pÃ¸idÃ¡nÃ­ novÃ©ho automobilu
         public void AddCar(Auto auto)
         {
             seznamAut.Add(auto);
@@ -118,7 +283,18 @@ namespace Autobazar
             return seznamAut; 
         }
 
-        // Metoda pro úpravu informací o automobilu
+        public List<String> PrintSeznamAut()
+        {
+            List<String> result = new List<String>();
+            foreach (Auto i in  seznamAut) 
+            {
+                result.Add(i.Vyrobce + " " + i.Typ + ": " + i.Stav);
+            }
+            return result;
+            
+        }
+
+        // Metoda pro Ãºpravu informacÃ­ o automobilu
         public void EditCar(int index, Auto noveInfo)
         {
             if (index >= 0 && index < seznamAut.Count)
@@ -127,7 +303,7 @@ namespace Autobazar
             }
         }
 
-        // Metoda pro získání informací o automobilu
+        // Metoda pro zÃ­skÃ¡nÃ­ informacÃ­ o automobilu
         
         public string[] GetCar(int index)
         {
@@ -135,11 +311,11 @@ namespace Autobazar
             { 
                 return new string[] { seznamAut[index].Vyrobce, seznamAut[index].Typ, seznamAut[index].RokVyroby.ToString(), seznamAut[index].NajeteKilometry.ToString(), seznamAut[index].Stav };
             }
-            return new string[] { "neplatný index" };
+            return new string[] { "neplatnÃ½ index" };
 
         }
 
-        // Metoda pro smazání automobilu
+        // Metoda pro smazÃ¡nÃ­ automobilu
         public void DeleteCar(int index)
         {
             if (index >= 0 && index < seznamAut.Count)

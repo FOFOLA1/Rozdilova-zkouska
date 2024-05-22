@@ -45,6 +45,7 @@
             edit = new Button();
             save = new Button();
             labelError = new Label();
+            discard = new Button();
             SuspendLayout();
             // 
             // label1
@@ -183,6 +184,7 @@
             delete.Tag = "delete";
             delete.Text = "Odstranit";
             delete.UseVisualStyleBackColor = true;
+            delete.Click += delete_Click;
             // 
             // listBox1
             // 
@@ -196,6 +198,8 @@
             listBox1.TabIndex = 22;
             listBox1.TabStop = false;
             listBox1.UseTabStops = false;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
+            listBox1.DoubleClick += listBox1_DoubleClick;
             // 
             // edit
             // 
@@ -209,6 +213,7 @@
             edit.Tag = "edit";
             edit.Text = "Upravit";
             edit.UseVisualStyleBackColor = true;
+            edit.Click += edit_Click;
             // 
             // save
             // 
@@ -216,28 +221,42 @@
             save.Font = new Font("Segoe UI", 12F);
             save.Location = new Point(102, 233);
             save.Name = "save";
-            save.Size = new Size(133, 31);
+            save.Size = new Size(123, 31);
             save.TabIndex = 24;
             save.TabStop = false;
             save.Tag = "save";
             save.Text = "Uložit změny";
             save.UseVisualStyleBackColor = true;
+            save.Click += save_Click;
             // 
             // labelError
             // 
             labelError.AutoSize = true;
             labelError.Font = new Font("Segoe UI", 15F);
-            labelError.Location = new Point(12, 317);
-            labelError.MaximumSize = new Size(354, 90);
+            labelError.Location = new Point(12, 285);
+            labelError.MaximumSize = new Size(354, 120);
             labelError.Name = "labelError";
             labelError.Size = new Size(0, 28);
             labelError.TabIndex = 25;
+            // 
+            // discard
+            // 
+            discard.Enabled = false;
+            discard.Font = new Font("Segoe UI", 12F);
+            discard.Location = new Point(231, 233);
+            discard.Name = "discard";
+            discard.Size = new Size(133, 31);
+            discard.TabIndex = 26;
+            discard.Text = "Zahodit změny";
+            discard.UseVisualStyleBackColor = true;
+            discard.Click += discard_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(discard);
             Controls.Add(labelError);
             Controls.Add(save);
             Controls.Add(edit);
@@ -256,7 +275,7 @@
             Controls.Add(comboBox);
             Controls.Add(label1);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Autoservis";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -280,5 +299,6 @@
         private Button edit;
         private Button save;
         private Label labelError;
+        private Button discard;
     }
 }
