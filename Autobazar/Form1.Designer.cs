@@ -171,6 +171,7 @@
             exit.Tag = "exit";
             exit.Text = "Odejít";
             exit.UseVisualStyleBackColor = true;
+            exit.Click += exit_Click;
             // 
             // delete
             // 

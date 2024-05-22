@@ -255,6 +255,11 @@ namespace Autobazar
             Auto c = autoservis.GetSeznamAut()[listBox1.SelectedIndex];
             labelError.Text = $"{c.Vyrobce} {c.Typ}:\n  Rok výroby: {c.RokVyroby}\n  Najeté kilometry: {c.NajeteKilometry}\n  Stav: {c.Stav}";
         }
+
+        private void exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 
     public partial class Auto
