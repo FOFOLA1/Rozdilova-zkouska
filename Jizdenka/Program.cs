@@ -7,28 +7,29 @@ namespace Jizdenka
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            int rows = 2;
-            int cols = 2;
-            int holes = 2;
+            int rows = 1;
+            int cols = 1;
+            int holes = 1;
 
             List<int[]> combs = new List<int[]> ();
 
 
-            //do
-            //{
-            //    Console.Write("Počet řádků: ");
-            //} while (!Int32.TryParse(Console.ReadLine(), out rows));
+            do
+            {
+                Console.Write("Počet řádků: ");
+            } while (!(Int32.TryParse(Console.ReadLine(), out rows) && rows > 0));
 
-            //do
-            //{
-            //    Console.Write("Počet sloupců: ");
-            //} while (!Int32.TryParse(Console.ReadLine(), out cols));
+            do
+            {
+                Console.Write("Počet sloupců: ");
+            } while (!(Int32.TryParse(Console.ReadLine(), out cols) && cols > 0));
 
-            //do
-            //{
-            //    Console.Write("Počet děr: ");
-            //} while (!Int32.TryParse(Console.ReadLine(), out holes));
+            do
+            {
+                Console.Write("Počet děr: ");
+            } while (!(Int32.TryParse(Console.ReadLine(), out holes) && holes > 0 && rows*cols >= holes));
 
             int[] jiz = new int[rows * cols];
 
@@ -40,8 +41,11 @@ namespace Jizdenka
             combinations(jiz, new int[holes], 0, jiz.Length - 1, 0, holes, combs);
             string txt = formatJiz(combs, rows, cols);
             Console.WriteLine(txt);
+            string path = printToFile(txt);
 
         }
+
+
 
         static void combinations(int[] jiz, int[] comb, int start, int len, int index, int holes, List<int[]> combs)
         {
@@ -64,11 +68,13 @@ namespace Jizdenka
             }
         }
 
+
+
+
         static string formatJiz(List<int[]> combs, int rows, int cols)
         {
             int maxlen = (rows * cols).ToString().Length;
             int count = 0;
-            int temp;
 
             string betwline = "";
             for (int i = 0; i < cols; i++)
@@ -77,45 +83,53 @@ namespace Jizdenka
             }
 
             string numline = "";
-            string num;
             string str = "";
             string strOut = "";
+            int numControl;
 
             foreach (int[] item in combs)
             {
                 count++;
                 str = count + "\n";
-
                 str += betwline + "\n";
 
-                for (int i = 1; i <= (cols * rows); i++)
+                numControl = 0;
+                for (int col = 1; col <= cols; col++)
                 {
-                    if (i != cols) temp = i;
-                    else temp = i%cols;
+                    for (int row = 1; row <= rows; row++)
+                    {
+                        numControl++;
 
-                    if (item.Any(cislo => cislo == temp))
-                    {
-                        numline += "|" + new string('\u2588', maxlen);
-                    }
-                    else
-                    {
-                        num = String.Format("{0," + maxlen + "}", i);
-                        numline += "|" + num;
-                    }
-                    
+                        if (item.Any(cislo => cislo == numControl))
+                        {
+                            numline += "|" + new string('\u2588', maxlen);
+                        }
+                        else
+                        {
+                            numline += "|" + String.Format("{0," + maxlen + "}", numControl);
+                        }
 
-                    if (i%cols == 0)
-                    {
-                        numline += "|\n" + betwline + "\n";
+                        if (numControl % cols == 0)
+                        {
+                            numline += "|\n" + betwline + "\n";
+                        }
                     }
                 }
+
                 str += numline + "\n";
+                numline = "";
                 strOut += str;
             }
             return strOut;
         }
 
-    }
+        static string printToFile(string txt)
+        {
+            string path = "";
 
-    // Program najde všechny možnosti správně, ale výpis nefunguje
+
+
+            return path;
+        }
+    }
 }
