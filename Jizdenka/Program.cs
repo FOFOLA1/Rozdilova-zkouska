@@ -40,8 +40,10 @@ namespace Jizdenka
 
             combinations(jiz, new int[holes], 0, jiz.Length - 1, 0, holes, combs);
             string txt = formatJiz(combs, rows, cols);
-            Console.WriteLine(txt);
-            string path = printToFile(txt);
+            File.WriteAllText("output.txt", txt);
+
+            FileInfo f = new FileInfo("output.txt");
+            Console.WriteLine($"Soubor uložen na adrese {f.FullName}");
 
         }
 
@@ -90,8 +92,8 @@ namespace Jizdenka
             foreach (int[] item in combs)
             {
                 count++;
-                str = count + "\n";
-                str += betwline + "\n";
+                str = count + "\r\n";
+                str += betwline + "\r\n";
 
                 numControl = 0;
                 for (int col = 1; col <= cols; col++)
@@ -111,25 +113,16 @@ namespace Jizdenka
 
                         if (numControl % cols == 0)
                         {
-                            numline += "|\n" + betwline + "\n";
+                            numline += "|\r\n" + betwline + "\r\n";
                         }
                     }
                 }
 
-                str += numline + "\n";
+                str += numline + "\r\n";
                 numline = "";
                 strOut += str;
             }
             return strOut;
-        }
-
-        static string printToFile(string txt)
-        {
-            string path = "";
-
-
-
-            return path;
         }
     }
 }
