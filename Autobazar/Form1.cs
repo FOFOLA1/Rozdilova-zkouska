@@ -1,4 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using System.Text;
+using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
+using Application = System.Windows.Forms.Application;
 
 namespace Autobazar
 {
@@ -8,9 +11,14 @@ namespace Autobazar
         Autoservis autoservis = new Autoservis();
         int temp_index;
 
+
+
         public Form1()
         {
             InitializeComponent();
+            if (File.Exists("save.txt")) autoservis.Load();
+            listBox1.DataSource = null;
+            listBox1.DataSource = autoservis.PrintSeznamAut();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -277,10 +285,11 @@ namespace Autobazar
     {
         private List<Auto> seznamAut = new List<Auto>();
 
-        // Metoda pro pøidání nového automobilu
+        // Metoda pro přidání nového automobilu
         public void AddCar(Auto auto)
         {
             seznamAut.Add(auto);
+            Save();
         }
 
         public List<Auto> GetSeznamAut() 
@@ -305,6 +314,7 @@ namespace Autobazar
             if (index >= 0 && index < seznamAut.Count)
             {
                 seznamAut[index] = noveInfo;
+                Save();
             }
         }
 
@@ -326,9 +336,38 @@ namespace Autobazar
             if (index >= 0 && index < seznamAut.Count)
             {
                 seznamAut.RemoveAt(index);
+                Save();
             }
         }
-    }
 
+        public void Save()
+        {
+            StringBuilder r = new StringBuilder("");
+            foreach (Auto auto in seznamAut)
+            {
+                r.Append($"{auto.Vyrobce}|{auto.Typ}|{auto.RokVyroby}|{auto.NajeteKilometry}|{auto.Stav}\r\n");
+            }
+            
+            File.WriteAllText("save.txt", r.ToString());
+        }
+
+        public void Load()
+        {
+            string s = File.ReadAllText("save.txt");
+            string[] st = s.Split("\r\n");
+
+            foreach (string str in st)
+            {
+                if (str != "")
+                {
+                    string[] stri = str.Split("|");
+                    AddCar(new Auto { Vyrobce = stri[0], Typ = stri[1], RokVyroby = Int32.Parse(stri[2]), NajeteKilometry = Int32.Parse(stri[3]), Stav = stri[4] });
+                }
+                
+            }
+
+        }
+
+    }
 
 }
